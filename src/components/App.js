@@ -182,12 +182,12 @@ class App extends Component {
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <a
             className="navbar-brand col-sm-3 col-md-2 mr-0"
-            href="http://www.dappuniversity.com/bootcamp"
+            href="https://github.com/ritviknv7"
             target="_blank"
             rel="noopener noreferrer"
           >
-          <img src={brain} width="30" height="30" className="d-inline-block align-top" alt="" />
-          &nbsp; Memory Tokens
+          <img src="/images/PESLogo.png" width="100" height="35" className="d-inline-block align-top" alt="" />
+          &nbsp; Rajith M | Ritvik NV
           </a>
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
