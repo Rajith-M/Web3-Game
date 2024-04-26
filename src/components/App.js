@@ -75,20 +75,22 @@ class App extends Component {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
   }
-  
+
   async loadBlockchainData() {
     const web3 = window.web3
     const accounts = await web3.eth.getAccounts()
-    this.setState({account: accounts[0]})
+    this.setState({ account: accounts[0] })
+
+    // Load smart contract
     const networkId = await web3.eth.net.getId()
     const networkData = MemoryToken.networks[networkId]
-    if(networkData){
+    if(networkData) {
       const abi = MemoryToken.abi
       const address = networkData.address
-      const token = new web3.eth.Contract(abi,address)
+      const token = new web3.eth.Contract(abi, address)
       this.setState({ token })
       const totalSupply = await token.methods.totalSupply().call()
-      this.setState({totalSupply})
+      this.setState({ totalSupply })
       // Load Tokens
       let balanceOf = await token.methods.balanceOf(accounts[0]).call()
       for (let i = 0; i < balanceOf; i++) {
@@ -98,9 +100,8 @@ class App extends Component {
           tokenURIs: [...this.state.tokenURIs, tokenURI]
         })
       }
-    }
-    else {
-      alert("Smart contract not deployed to detected network")
+    } else {
+      alert('Smart contract not deployed to detected network.')
     }
   }
 
@@ -116,7 +117,6 @@ class App extends Component {
     }
   }
 
-
   flipCard = async (cardId) => {
     let alreadyChosen = this.state.cardsChosen.length
 
@@ -129,6 +129,7 @@ class App extends Component {
       setTimeout(this.checkForMatch, 100)
     }
   }
+
 
   checkForMatch = async () => {
     const optionOneId = this.state.cardsChosenId[0]
@@ -167,7 +168,7 @@ class App extends Component {
       account: '0x0',
       token: null,
       totalSupply: 0,
-      tokenURIs:[],
+      tokenURIs: [],
       cardArray: [],
       cardsChosen: [],
       cardsChosenId: [],
@@ -198,11 +199,11 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
-                <h1 className="d-4">Edit this file in App.js!</h1>
+                <h1 className="d-4">Start matching now!</h1>
 
                 <div className="grid mb-4" >
 
-                { this.state.cardArray.map((card, key) => {
+                  { this.state.cardArray.map((card, key) => {
                     return(
                       <img
                         key={key}
@@ -218,15 +219,23 @@ class App extends Component {
                     )
                   })}
 
+
                 </div>
 
                 <div>
 
-                  {/* Code goes here... */}
+                  <h5>Tokens Collected:<span id="result">&nbsp;{this.state.tokenURIs.length}</span></h5>
 
                   <div className="grid mb-4" >
 
-                    {/* Code goes here... */}
+                    { this.state.tokenURIs.map((tokenURI, key) => {
+                      return(
+                        <img
+                          key={key}
+                          src={tokenURI}
+                        />
+                      )
+                    })}
 
                   </div>
 
