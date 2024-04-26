@@ -75,8 +75,7 @@ class App extends Component {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
   }
-
-
+  
   async loadBlockchainData() {
     const web3 = window.web3
     const accounts = await web3.eth.getAccounts()
@@ -98,13 +97,69 @@ class App extends Component {
         this.setState({
           tokenURIs: [...this.state.tokenURIs, tokenURI]
         })
+      }
     }
-  }
     else {
       alert("Smart contract not deployed to detected network")
     }
   }
 
+  chooseImage = (cardId) => {
+    cardId = cardId.toString()
+    if(this.state.cardsWon.includes(cardId)) {
+      return window.location.origin + '/images/white.png'
+    }
+    else if(this.state.cardsChosenId.includes(cardId)) {
+      return CARD_ARRAY[cardId].img
+    } else {
+      return window.location.origin + '/images/blank.png'
+    }
+  }
+
+
+  flipCard = async (cardId) => {
+    let alreadyChosen = this.state.cardsChosen.length
+
+    this.setState({
+      cardsChosen: [...this.state.cardsChosen, this.state.cardArray[cardId].name],
+      cardsChosenId: [...this.state.cardsChosenId, cardId]
+    })
+
+    if (alreadyChosen === 1) {
+      setTimeout(this.checkForMatch, 100)
+    }
+  }
+
+  checkForMatch = async () => {
+    const optionOneId = this.state.cardsChosenId[0]
+    const optionTwoId = this.state.cardsChosenId[1]
+
+    if(optionOneId == optionTwoId) {
+      alert('You have clicked the same image!')
+    } else if (this.state.cardsChosen[0] === this.state.cardsChosen[1]) {
+      alert('You found a match')
+      this.state.token.methods.mint(
+        this.state.account,
+        window.location.origin + CARD_ARRAY[optionOneId].img.toString()
+      )
+      .send({ from: this.state.account })
+      .on('transactionHash', (hash) => {
+        this.setState({
+          cardsWon: [...this.state.cardsWon, optionOneId, optionTwoId],
+          tokenURIs: [...this.state.tokenURIs, CARD_ARRAY[optionOneId].img]
+        })
+      })
+    } else {
+      alert('Sorry, try again')
+    }
+    this.setState({
+      cardsChosen: [],
+      cardsChosenId: []
+    })
+    if (this.state.cardsWon.length === CARD_ARRAY.length) {
+      alert('Congratulations! You found them all!')
+    }
+  }
 
   constructor(props) {
     super(props)
