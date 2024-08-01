@@ -1,4 +1,4 @@
-# Memory Tokens DApp
+# Web-3 Game
 
 This project is a decentralized application (DApp) for managing memory tokens using the Ethereum blockchain. It leverages various technologies including Truffle, Solidity, React, and Web3.
 
